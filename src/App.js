@@ -30,7 +30,7 @@ function App() {
 
   const [expenses, setExpenses] = useState(EXPENSES)
 
-  const saveExpensehandler = (expense) => {
+  const saveExpensehandler = expense => {
     console.log('save expense handler', expense);
     setExpenses(prevData => {
       return [expense, ...prevData];
