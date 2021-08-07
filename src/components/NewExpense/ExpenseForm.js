@@ -1,8 +1,8 @@
 import './ExpenseForm.css';
 import React, { useState } from 'react';
 // useState() is a React hook which allows us to persist the state of a var during rerender cycles. It always returns -> 1. A pointer to the managed state var and 2. A function to update the same. React hooks (hook functions) cannot be called inside a nested function, conditional statements or loops. All the hooks start with useXXX().
-
 // useEffect() -> Another react hook used to manage side effects or anything that cannot be managed with the normal component flow. Side effects means some kind of code logic that affects the component. Example: A piece of code that might not complete during thr execution of the component like HTTP requests or some other async tasks. HTTP requests are generally considered as a side effect. useEffect(function, []) takes a function that is supposed to be executed after a rerender and an array of external dependencies (defined outside the useEffect) which controls the execution of this function(whether it is to be executed after a rerender or not). By default, if an array is not provided then the function will be executed after every rerender. If an emoty array is passed then in that case it will run only once (first time). useEffect(()=> {return () => {}}, []) can also return a function called as the clean up function which is called/executed before useEffect is executed again and before the component is unmount/removed from the DOM.
+// useMemo() -> React hook to store/persist data during re-evaluations. It's similar to useCallback() hook which stores functions. useMemo(..., []) accepts a function which should return the data that is to be stored and accepts a dependency array to update the data if some external data changes. Can be used when good amount of computation is required generate the data or in other words has high computational cost rather than memory/storage cost.
 
 /* Instead of using STATE variables we could have used GLOBAL vars but on doing so we would have been able to only persist/store the values received via UI(user). By not using GLOBAL vars, we can achieve 2-way data binding which simply means when the values are updated via the UI(user), the changes are passed on to the model(code) and when values are updated via program(code), the UI is updated to reflect the new values. Example: Here, 'enteredTitle, enteredDate, enteredAmount' STATE vars are updated via the User(event handler functions) as well as the code(submitHandler function) */
 const ExpenseForm = (props) => {
@@ -26,7 +26,8 @@ const ExpenseForm = (props) => {
         //     enteredTitle: event.target.value,
         // })
 
-        // In case of single state update use the following solution in which React takes care to provide latest correct previous state values/snapshot to the passed funstion keeping all state updates in mind.
+        // In case of single state update use the following solution in which React takes care to provide latest correct previous state values/snapshot to the passed function keeping all state updates in mind. Since state change/updation can be postponded by React function approach is the correct way.
+        // NOTE: React does keep a track of the order in which a particular state is updated. Example: setEnteredTitle() might be multiple time with different values to update enteredTitle var. In this case the order of setEnteredTitle() call with different values will be maintained. Say setEnteredTitle('ABC'); setEnteredTitle('PQR'), so here the state updation will be processed for 'ABC' first and then 'PQR'. 
         // Use function approach when the state approach depends on previous state.
         // setUserInput((prevState) => {
         //     return {
@@ -51,6 +52,7 @@ const ExpenseForm = (props) => {
             date: new Date(enteredDate),
         }
         props.onSaveExpenseData(expenseData);
+        // State Batching -> If multiple states are updated in the same synchronous function block (without any async tasks like then() block, no time delay creating tasks), then in that case React processes all the state updation together and rerenders/re-executes the component only once after all the states have been updated.
         setEnteredTitle('');
         setEnteredAmount('');
         setEnteredDate('');

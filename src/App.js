@@ -49,7 +49,7 @@ function App() {
     </div>
   );
 
-  // The following piece of code is same as the above return statement. The JSX code is somewhat converted to the following lines internally and due to this reason we need to have a wrapping element like div in this case. The below transformation won't be possible without a parent/wrapper element.
+  // The following piece of code is same as the above return statement. The JSX code is somewhat converted to the following lines internally and due to this reason we need to have a wrapping element like div in this case. The below transformation won't be possible without a parent/wrapper element. Also in JS we can return only a single element and hence we cannot use return (React.createElement(A); React.createElement(B)). That's the reason why we cannot return 2 JSX elements and hence we must have only 1 root element. We can ofcourse have nested JSX elements. 
   // return React.createElement(
   //   'div',
   //   {},
